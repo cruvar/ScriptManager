@@ -1,9 +1,9 @@
 #include "scriptrunner.h"
+#include "defines.h"
 
 #include <QProcess>
 #include <QCoreApplication>
 #include <QDebug>
-#include <QTranslator>
 
 ScriptRunner::ScriptRunner(QObject *parent) : QObject(parent)
 {
@@ -23,10 +23,8 @@ void ScriptRunner::initConnections()
 
 void ScriptRunner::start()
 {
-    process->start("ping localhost");
-//    process->waitForFinished(-1); // will wait forever until finished
-//    process->start("python.exe", pythonCommandArguments);
-    qDebug() << "start";
+//    process->start("ping localhost");
+    process->start("python", pythonCommandArguments);
 }
 
 void ScriptRunner::setFile(const QString &filePath)
@@ -46,12 +44,12 @@ void ScriptRunner::readStdOut()
 {
     QByteArray sout;
     sout = process->readAllStandardOutput();
-    emit readyReadStdout(QString(sout).toStdString().c_str());
+    emit readyReadStdout(QString(sout));
 }
 
 void ScriptRunner::readStdErr()
 {
     QByteArray serr;
     serr = process->readAllStandardError();
-    emit readyReadStderr(QString(serr).toStdString().c_str());
+    emit readyReadStderr(QString(serr));
 }

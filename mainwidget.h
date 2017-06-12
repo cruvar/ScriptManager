@@ -1,25 +1,26 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <QDialog>
+#include <QMainWindow>
 #include <memory>
 
 class QLineEdit;
 class QTextEdit;
+class QPushButton;
 
 class ScriptRunner;
 
-class MainWidget : public QDialog
+class MainWidget : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWidget(QDialog *parent = 0);
+    MainWidget(QWidget *parent = 0);
     ~MainWidget();
 
 public slots:
 
-    void setFilePath();
+    void openFile();
 
 private:
 
