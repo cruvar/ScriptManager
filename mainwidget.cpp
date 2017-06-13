@@ -38,9 +38,19 @@ void MainWidget::initGui()
 {
     QToolBar *tbMain = new QToolBar(this);
     {
-        QAction *openActon = new QAction(this);
-        connect(openActon,&QAction::triggered,this,&MainWidget::openFile);
-        tbMain->addAction(openActon);
+        QAction *openAction = new QAction(this);
+        {
+            openAction->setIcon(QIcon(":/new/icons/icons/open.png"));
+            connect(openAction,&QAction::triggered,this,&MainWidget::openFile);
+            tbMain->addAction(openAction);
+        }
+
+        QAction *showLogAction = new QAction(this);
+        {
+            showLogAction->setIcon(QIcon(":/new/icons/icons/log.png"));
+//            connect(showLogAction,&QAction::triggered,this,/*show the mf log*/)
+            tbMain->addAction(showLogAction);
+        }
     }
     this->addToolBar(tbMain);
 

@@ -14,9 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     mainwidget.cpp \
-    scriptrunner.cpp
+    scriptrunner.cpp \
+    logwindow.cpp
 
 HEADERS  += \
     defines.h \
     mainwidget.h \
-    scriptrunner.h
+    scriptrunner.h \
+    logwindow.h
+
+RESOURCES += \
+    resources.qrc
