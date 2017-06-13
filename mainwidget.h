@@ -9,6 +9,7 @@ class QTextEdit;
 class QPushButton;
 
 class ScriptRunner;
+class LogWindow;
 
 class MainWidget : public QMainWindow
 {
@@ -28,12 +29,11 @@ private:
     void initConnections();
 
     std::shared_ptr<ScriptRunner> process;
+    std::shared_ptr<LogWindow> logWindow;
 
     QPushButton *btnSetFile;
     QLineEdit *leParams;
     QPushButton *btnStart;
-
-    QTextEdit *teOut;
 
 };
 

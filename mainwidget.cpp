@@ -1,5 +1,6 @@
 #include "mainwidget.h"
 #include "scriptrunner.h"
+#include "logwindow.h"
 #include "defines.h"
 
 #include <QLayout>
@@ -15,6 +16,7 @@
 MainWidget::MainWidget(QWidget *parent)
     : QMainWindow(parent)
     , process(std::make_shared<ScriptRunner>(this))
+    , logWindow(std::make_shared<LogWindow>())
 {
     initGui();
     initConnections();
@@ -48,7 +50,7 @@ void MainWidget::initGui()
         QAction *showLogAction = new QAction(this);
         {
             showLogAction->setIcon(QIcon(":/new/icons/icons/log.png"));
-//            connect(showLogAction,&QAction::triggered,this,/*show the mf log*/)
+            connect(showLogAction,&QAction::triggered,logWindow.get(),&LogWindow::open);
             tbMain->addAction(showLogAction);
         }
     }
@@ -64,32 +66,17 @@ void MainWidget::initGui()
                 {
                     QHBoxLayout *layScripts = new QHBoxLayout(gbScripts);
                     {
-                        btnSetFile = new QPushButton(QSTRING("Set_script"), this);
                         leParams = new QLineEdit(this);
                         btnStart = new QPushButton(QSTRING("Start"), this);
+                        connect(btnStart,&QPushButton::clicked,process.get(),&ScriptRunner::start);
 
-                        layScripts->addWidget(btnSetFile);
                         layScripts->addWidget(leParams);
                         layScripts->addWidget(btnStart);
                     }
                 }
                 layTop->addWidget(gbScripts);
             }
-
-            QVBoxLayout *layBottom = new QVBoxLayout;
-            {
-                QGroupBox *gbOut = new QGroupBox(QSTRING("Output:"),this);
-                {
-                    QVBoxLayout *layOut = new QVBoxLayout(gbOut);
-                    {
-                        teOut = new QTextEdit(this);
-                        layOut->addWidget(teOut);
-                    }
-                }
-                layBottom->addWidget(gbOut);
-            }
             layMain->addLayout(layTop);
-            layMain->addLayout(layBottom);
         }
     }
     this->setCentralWidget(wMain);
@@ -97,8 +84,6 @@ void MainWidget::initGui()
 
 void MainWidget::initConnections()
 {
-    connect(process.get(),&ScriptRunner::readyReadStdout,teOut,&QTextEdit::insertPlainText);
-    connect(process.get(),&ScriptRunner::readyReadStderr,teOut,&QTextEdit::insertPlainText);
-    connect(btnSetFile,&QPushButton::clicked,this,&MainWidget::openFile);
-    connect(btnStart,&QPushButton::clicked,process.get(),&ScriptRunner::start);
+    connect(process.get(),&ScriptRunner::readyReadStdout,logWindow.get(),&LogWindow::appendMsg);
+    connect(process.get(),&ScriptRunner::readyReadStderr,logWindow.get(),&LogWindow::appendMsg);
 }
