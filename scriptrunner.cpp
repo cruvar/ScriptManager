@@ -13,6 +13,7 @@ ScriptRunner::ScriptRunner(QObject *parent) : QObject(parent)
 
 ScriptRunner::~ScriptRunner()
 {
+    qDebug() << "delete process";
     process->close();
 }
 

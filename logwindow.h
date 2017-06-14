@@ -9,6 +9,7 @@ class LogWindow : public QDialog
 {
 public:
     LogWindow(QWidget *parent = nullptr);
+    ~LogWindow();
 
 public slots:
 

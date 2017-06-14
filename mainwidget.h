@@ -29,7 +29,7 @@ private:
     void initConnections();
 
     std::shared_ptr<ScriptRunner> process;
-    std::shared_ptr<LogWindow> logWindow;
+    LogWindow *logWindow;
 
     QPushButton *btnSetFile;
     QLineEdit *leParams;

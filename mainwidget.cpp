@@ -16,7 +16,7 @@
 MainWidget::MainWidget(QWidget *parent)
     : QMainWindow(parent)
     , process(std::make_shared<ScriptRunner>(this))
-    , logWindow(std::make_shared<LogWindow>())
+    , logWindow(new LogWindow())
 {
     initGui();
     initConnections();
@@ -24,7 +24,8 @@ MainWidget::MainWidget(QWidget *parent)
 
 MainWidget::~MainWidget()
 {
-
+    qDebug() << "delete mainwindow";
+    delete logWindow;
 }
 
 void MainWidget::openFile()
@@ -38,6 +39,8 @@ void MainWidget::openFile()
 
 void MainWidget::initGui()
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     QToolBar *tbMain = new QToolBar(this);
     {
         QAction *openAction = new QAction(this);
@@ -50,7 +53,7 @@ void MainWidget::initGui()
         QAction *showLogAction = new QAction(this);
         {
             showLogAction->setIcon(QIcon(":/new/icons/icons/log.png"));
-            connect(showLogAction,&QAction::triggered,logWindow.get(),&LogWindow::open);
+            connect(showLogAction,&QAction::triggered,logWindow,&LogWindow::open);
             tbMain->addAction(showLogAction);
         }
     }
@@ -84,6 +87,6 @@ void MainWidget::initGui()
 
 void MainWidget::initConnections()
 {
-    connect(process.get(),&ScriptRunner::readyReadStdout,logWindow.get(),&LogWindow::appendMsg);
-    connect(process.get(),&ScriptRunner::readyReadStderr,logWindow.get(),&LogWindow::appendMsg);
+    connect(process.get(),&ScriptRunner::readyReadStdout,logWindow,&LogWindow::appendMsg);
+    connect(process.get(),&ScriptRunner::readyReadStderr,logWindow,&LogWindow::appendMsg);
 }
