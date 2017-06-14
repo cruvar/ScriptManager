@@ -15,7 +15,7 @@
 
 MainWidget::MainWidget(QWidget *parent)
     : QMainWindow(parent)
-    , process(std::make_shared<ScriptRunner>(this))
+    , process(new ScriptRunner(this))
     , logWindow(new LogWindow())
 {
     initGui();
@@ -24,7 +24,7 @@ MainWidget::MainWidget(QWidget *parent)
 
 MainWidget::~MainWidget()
 {
-    qDebug() << "delete mainwindow";
+    delete process;
     delete logWindow;
 }
 
@@ -37,10 +37,14 @@ void MainWidget::openFile()
     process->setFile(filePath);
 }
 
+void MainWidget::closeEvent(QCloseEvent *event)
+{
+    Q_UNUSED(event);
+    logWindow->close();
+}
+
 void MainWidget::initGui()
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-
     QToolBar *tbMain = new QToolBar(this);
     {
         QAction *openAction = new QAction(this);
@@ -71,7 +75,7 @@ void MainWidget::initGui()
                     {
                         leParams = new QLineEdit(this);
                         btnStart = new QPushButton(QSTRING("Start"), this);
-                        connect(btnStart,&QPushButton::clicked,process.get(),&ScriptRunner::start);
+                        connect(btnStart,&QPushButton::clicked,process,&ScriptRunner::start);
 
                         layScripts->addWidget(leParams);
                         layScripts->addWidget(btnStart);
@@ -87,6 +91,6 @@ void MainWidget::initGui()
 
 void MainWidget::initConnections()
 {
-    connect(process.get(),&ScriptRunner::readyReadStdout,logWindow,&LogWindow::appendMsg);
-    connect(process.get(),&ScriptRunner::readyReadStderr,logWindow,&LogWindow::appendMsg);
+    connect(process,&ScriptRunner::readyReadStdout,logWindow,&LogWindow::appendMsg);
+    connect(process,&ScriptRunner::readyReadStderr,logWindow,&LogWindow::appendMsg);
 }

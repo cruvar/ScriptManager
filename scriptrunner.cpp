@@ -5,16 +5,17 @@
 #include <QCoreApplication>
 #include <QDebug>
 
-ScriptRunner::ScriptRunner(QObject *parent) : QObject(parent)
+ScriptRunner::ScriptRunner(QObject *parent)
+    : QObject(parent)
+    , process(new QProcess(this))
 {
-    process = new QProcess(this);
     initConnections();
 }
 
 ScriptRunner::~ScriptRunner()
 {
-    qDebug() << "delete process";
     process->close();
+    qDebug() << "delete process";
 }
 
 void ScriptRunner::initConnections()

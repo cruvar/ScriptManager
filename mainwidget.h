@@ -23,12 +23,15 @@ public slots:
 
     void openFile();
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
 
     void initGui();
     void initConnections();
 
-    std::shared_ptr<ScriptRunner> process;
+    ScriptRunner *process;
     LogWindow *logWindow;
 
     QPushButton *btnSetFile;
