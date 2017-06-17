@@ -9,11 +9,6 @@ LogWindow::LogWindow(QWidget *parent) : QDialog(parent)
     initGui();
 }
 
-LogWindow::~LogWindow()
-{
-    qDebug() << "delete logwindow";
-}
-
 void LogWindow::appendMsg(const QString &msg)
 {
     teLog->insertPlainText(msg);

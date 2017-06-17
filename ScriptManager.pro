@@ -13,15 +13,19 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    mainwidget.cpp \
     scriptrunner.cpp \
-    logwindow.cpp
+    logwindow.cpp \
+    filebrowser.cpp \
+    mainwindow.cpp \
+    dynamicparameter.cpp
 
 HEADERS  += \
     defines.h \
-    mainwidget.h \
     scriptrunner.h \
-    logwindow.h
+    logwindow.h \
+    filebrowser.h \
+    mainwindow.h \
+    dynamicparameter.h
 
 RESOURCES += \
     resources.qrc

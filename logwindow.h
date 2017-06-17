@@ -8,8 +8,7 @@ class QPlainTextEdit;
 class LogWindow : public QDialog
 {
 public:
-    LogWindow(QWidget *parent = nullptr);
-    ~LogWindow();
+    explicit LogWindow(QWidget *parent = nullptr);
 
 public slots:
 

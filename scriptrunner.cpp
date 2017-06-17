@@ -15,7 +15,6 @@ ScriptRunner::ScriptRunner(QObject *parent)
 ScriptRunner::~ScriptRunner()
 {
     process->close();
-    qDebug() << "delete process";
 }
 
 void ScriptRunner::initConnections()

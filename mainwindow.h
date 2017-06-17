@@ -1,5 +1,5 @@
-#ifndef MAINWIDGET_H
-#define MAINWIDGET_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <memory>
@@ -10,18 +10,19 @@ class QPushButton;
 
 class ScriptRunner;
 class LogWindow;
+class FileBrowser;
 
-class MainWidget : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWidget(QWidget *parent = 0);
-    ~MainWidget();
+    MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 public slots:
 
-    void openFile();
+    void setPath();
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -31,13 +32,11 @@ private:
     void initGui();
     void initConnections();
 
+    int dynParameterCounter;
+
     ScriptRunner *process;
     LogWindow *logWindow;
-
-    QPushButton *btnSetFile;
-    QLineEdit *leParams;
-    QPushButton *btnStart;
-
+    FileBrowser *fileBrow;
 };
 
-#endif // MAINWIDGET_H
+#endif // MAINWINDOW_H
