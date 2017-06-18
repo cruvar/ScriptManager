@@ -7,6 +7,7 @@
 class QLineEdit;
 class QTextEdit;
 class QPushButton;
+class QVBoxLayout;
 
 class ScriptRunner;
 class LogWindow;
@@ -24,6 +25,10 @@ public slots:
 
     void setPath();
 
+    void addParam();
+
+    void delParam();
+
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -33,6 +38,7 @@ private:
     void initConnections();
 
     int dynParameterCounter;
+    QVBoxLayout *layParams;
 
     ScriptRunner *process;
     LogWindow *logWindow;

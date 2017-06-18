@@ -39,6 +39,25 @@ void MainWindow::setPath()
     fileBrow->setRootIndex(dir);
 }
 
+void MainWindow::addParam()
+{
+    dynParameterCounter++;
+    DynamicParameter *dPar = new DynamicParameter(dynParameterCounter, this);
+    layParams->addWidget(dPar);
+}
+
+void MainWindow::delParam()
+{
+    for(int i = 0; i < layParams->count(); ++i){
+        DynamicParameter *dPar = qobject_cast<DynamicParameter*>(layParams->itemAt(i)->widget());
+        if(dPar->getCounter() == dynParameterCounter){
+            dynParameterCounter--;
+            dPar->hide();
+            delete dPar;
+        }
+    }
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event);
@@ -69,29 +88,31 @@ void MainWindow::initGui()
     {
         QGridLayout *layMain = new QGridLayout(wMain);
         {
-            fileBrow = new FileBrowser(this);
+            QGroupBox *gbFileBrowser = new QGroupBox(QSTRING("Files:"),wMain);
             {
+                QVBoxLayout *layFiles = new QVBoxLayout(gbFileBrowser);
+                {
+                    fileBrow = new FileBrowser(this);
+                    {
 
+                    }
+                    layFiles->addWidget(fileBrow);
+                }
+                gbFileBrowser->setLayout(layFiles);
             }
+
             QGroupBox *gbControl = new QGroupBox(QSTRING("Script control:"), wMain);
             {
                 QHBoxLayout *layControl = new QHBoxLayout(gbControl);
                 {
                     QPushButton *btnAddArg = new QPushButton(QIcon(":/new/icons/icons/add.png"), QSTRING(""), gbControl);
                     QPushButton *btnDelArg = new QPushButton(QIcon(":/new/icons/icons/del.png"), QSTRING(""), gbControl);
-//                    connect(btnAddArg,&QPushButton::clicked,this,[=]{
-//                        dynParameterCounter++
-//                        DynamicParameter *dPar = new DynamicParameter(dynParameterCounter, this);
-//                    });
+                    connect(btnAddArg,&QPushButton::clicked,this,&MainWindow::addParam);
+                    connect(btnDelArg,&QPushButton::clicked,this,&MainWindow::delParam);
 
-//                    connect(btnDelArg,&QPushButton::clicked,this,[=]{
-//                        dynParameterCounter--
-//                        layControl->removeWidget();
-//                    });
 
                     QPushButton *btnStart = new QPushButton(QSTRING("Start"), gbControl);
                     connect(btnStart,&QPushButton::clicked,process,&ScriptRunner::start);
-
 
                     layControl->setAlignment(Qt::AlignTop);
                     layControl->addWidget(btnAddArg);
@@ -104,18 +125,15 @@ void MainWindow::initGui()
 
             QGroupBox *gbParams = new QGroupBox(QSTRING("Parameters:"), wMain);
             {
-                QVBoxLayout *layParams = new QVBoxLayout(gbParams);
+                layParams = new QVBoxLayout(gbParams);
                 {
-                    DynamicParameter *dPar = new DynamicParameter(dynParameterCounter, this);
 
-                    layParams->setAlignment(Qt::AlignTop);
-                    layParams->addWidget(dPar);
-
-                }
+                }                
+                layParams->setAlignment(Qt::AlignTop);
                 gbParams->setLayout(layParams);
             }
 
-            layMain->addWidget(fileBrow, 0,0, 10,1 );
+            layMain->addWidget(gbFileBrowser, 0,0, 10,1 );
             layMain->addWidget(gbControl, 0,1);
             layMain->addWidget(gbParams, 1,1, 9,1);
         }
