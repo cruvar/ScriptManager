@@ -22,6 +22,8 @@ public slots:
 
     void start();
 
+    void stop();
+
     void setFile(const QString& filePath);
 
     void setArguments(const QStringList &args);

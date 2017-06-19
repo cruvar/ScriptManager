@@ -28,6 +28,11 @@ void ScriptRunner::start()
     process->start("python", pythonCommandArguments);
 }
 
+void ScriptRunner::stop()
+{
+    process->close();
+}
+
 void ScriptRunner::setFile(const QString &filePath)
 {
     scriptFile = QCoreApplication::applicationDirPath() + filePath;

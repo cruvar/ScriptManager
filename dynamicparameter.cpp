@@ -31,6 +31,7 @@ void DynamicParameter::initGui()
             parameter = str;
         });
 
+        layMain->setMargin(0);
         layMain->addWidget(new QLabel(QSTRING("Par #%1").arg(counter)));
         layMain->addWidget(leParam);
     }

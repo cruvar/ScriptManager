@@ -92,10 +92,8 @@ void MainWindow::initGui()
             {
                 QVBoxLayout *layFiles = new QVBoxLayout(gbFileBrowser);
                 {
-                    fileBrow = new FileBrowser(this);
-                    {
-
-                    }
+                    fileBrow = new FileBrowser(process, gbFileBrowser);
+                    layFiles->setMargin(0);
                     layFiles->addWidget(fileBrow);
                 }
                 gbFileBrowser->setLayout(layFiles);
@@ -112,13 +110,16 @@ void MainWindow::initGui()
 
 
                     QPushButton *btnStart = new QPushButton(QSTRING("Start"), gbControl);
+                    QPushButton *btnStop = new  QPushButton(QSTRING("Stop"), gbControl);
                     connect(btnStart,&QPushButton::clicked,process,&ScriptRunner::start);
+                    connect(btnStop,&QPushButton::clicked,process,&ScriptRunner::stop);
 
                     layControl->setAlignment(Qt::AlignTop);
                     layControl->addWidget(btnAddArg);
                     layControl->addWidget(btnDelArg);
                     layControl->addStretch();
                     layControl->addWidget(btnStart);
+                    layControl->addWidget(btnStop);
                 }
 
             }
