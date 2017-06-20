@@ -26,7 +26,11 @@ public slots:
 
     void setFile(const QString& filePath);
 
-    void setArguments(const QStringList &args);
+    void setArgument(int num, const QString& text);
+
+    void addArgument();
+
+    void delArgument();
 
 private:
 
@@ -38,7 +42,6 @@ private:
 
     QProcess *process;
 
-    QString scriptFile;
     QStringList pythonCommandArguments;
 
 };

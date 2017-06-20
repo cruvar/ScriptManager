@@ -9,6 +9,7 @@ class LogWindow : public QDialog
 {
 public:
     explicit LogWindow(QWidget *parent = nullptr);
+    ~LogWindow();
 
 public slots:
 
@@ -17,6 +18,8 @@ public slots:
 private:
     void initGui();
     void initConnections();
+    void saveSettings();
+    void loadSettings();
 
     QPlainTextEdit *teLog;
 };

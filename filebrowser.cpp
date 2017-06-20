@@ -1,6 +1,7 @@
 #include "filebrowser.h"
 #include "scriptrunner.h"
 
+#include <QSettings>
 #include <QDirModel>
 #include <QTreeView>
 #include <QVBoxLayout>
@@ -11,11 +12,18 @@ FileBrowser::FileBrowser(ScriptRunner *proc, QWidget *parent)
     , process(proc)
 {
     initGui();
+    loadSettings();
 }
 
-void FileBrowser::setRootIndex(const QString &path)
+FileBrowser::~FileBrowser()
 {
-    twBrowser->setRootIndex(model->index(path));
+    saveSettings();
+}
+
+void FileBrowser::setRootPath(const QString &path)
+{
+    rootPath = path;
+    twBrowser->setRootIndex(model->index(rootPath));
 }
 
 void FileBrowser::initGui()
@@ -42,4 +50,22 @@ void FileBrowser::initGui()
         }
         layMain->addWidget(twBrowser);
     }
+}
+
+void FileBrowser::saveSettings()
+{
+    QSettings settings( "settings.conf", QSettings::IniFormat );
+    settings.beginGroup( "FileBrowserSettings" );
+    settings.setValue( "RootPath", rootPath );
+    settings.endGroup();
+}
+
+void FileBrowser::loadSettings()
+{
+    QSettings settings( "settings.conf", QSettings::IniFormat );
+    settings.beginGroup( "FileBrowserSettings" );
+    QString path = settings.value("RootPath", QDir::currentPath()).toString();
+    settings.endGroup();
+
+    this->setRootPath(path);
 }

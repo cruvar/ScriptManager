@@ -30,12 +30,15 @@ public slots:
     void delParam();
 
 protected:
+
     void closeEvent(QCloseEvent *event);
 
 private:
 
     void initGui();
     void initConnections();
+    void saveSettings();
+    void loadSettings();
 
     int dynParameterCounter;
     QVBoxLayout *layParams;

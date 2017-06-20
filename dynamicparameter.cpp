@@ -29,6 +29,7 @@ void DynamicParameter::initGui()
         QLineEdit *leParam = new QLineEdit(this);
         connect(leParam,&QLineEdit::textChanged,this,[=](QString str){
             parameter = str;
+            emit textChanged(parameter);
         });
 
         layMain->setMargin(0);

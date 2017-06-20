@@ -5,6 +5,7 @@
 #include "dynamicparameter.h"
 #include "defines.h"
 
+#include <QSettings>
 #include <QLayout>
 #include <QGroupBox>
 #include <QLineEdit>
@@ -22,11 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
     , logWindow(new LogWindow(/*this*/))
 {
     initGui();
+    loadSettings();
     initConnections();
 }
 
 MainWindow::~MainWindow()
 {
+    saveSettings();
     delete logWindow;
 }
 
@@ -36,7 +39,7 @@ void MainWindow::setPath()
                                                     QDir::currentPath(),
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
-    fileBrow->setRootIndex(dir);
+    fileBrow->setRootPath(dir);
 }
 
 void MainWindow::addParam()
@@ -44,6 +47,10 @@ void MainWindow::addParam()
     dynParameterCounter++;
     DynamicParameter *dPar = new DynamicParameter(dynParameterCounter, this);
     layParams->addWidget(dPar);
+    process->addArgument();
+    connect(dPar,&DynamicParameter::textChanged,this, [=](QString str){
+        process->setArgument(dynParameterCounter, str);
+    }, Qt::UniqueConnection);
 }
 
 void MainWindow::delParam()
@@ -52,6 +59,7 @@ void MainWindow::delParam()
         DynamicParameter *dPar = qobject_cast<DynamicParameter*>(layParams->itemAt(i)->widget());
         if(dPar->getCounter() == dynParameterCounter){
             dynParameterCounter--;
+            process->delArgument();
             dPar->hide();
             delete dPar;
         }
@@ -146,4 +154,31 @@ void MainWindow::initConnections()
 {
     connect(process,&ScriptRunner::readyReadStdout,logWindow,&LogWindow::appendMsg);
     connect(process,&ScriptRunner::readyReadStderr,logWindow,&LogWindow::appendMsg);
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings( "settings.conf", QSettings::IniFormat );
+    settings.beginGroup( "MainWindowPosition" );
+    settings.setValue( "x", this->x() );
+    settings.setValue( "y", this->y() );
+    settings.setValue( "width", this->width() );
+    settings.setValue( "height", this->height() );
+    settings.endGroup();
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings settings( "settings.conf", QSettings::IniFormat );
+
+    settings.beginGroup( "MainWindowPosition" );
+    int x = settings.value( "x", -1 ).toInt();
+    int y = settings.value( "y", -1 ).toInt();
+    int width = settings.value( "width", -1 ).toInt();
+    int height = settings.value( "height", -1 ).toInt();
+    settings.endGroup();
+
+    if( x > 0 && y > 0 && width > 0 && height > 0 ) {
+        this->setGeometry( x, y, width, height );
+    }
 }

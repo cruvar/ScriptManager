@@ -10,6 +10,7 @@ public:
     explicit DynamicParameter(int count, QWidget *parent = 0);
 
 signals:
+    void textChanged(QString);
 
 public slots:
 

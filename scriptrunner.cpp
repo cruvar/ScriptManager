@@ -9,6 +9,7 @@ ScriptRunner::ScriptRunner(QObject *parent)
     : QObject(parent)
     , process(new QProcess(this))
 {
+    pythonCommandArguments << "";
     initConnections();
 }
 
@@ -24,7 +25,7 @@ void ScriptRunner::initConnections()
 
 void ScriptRunner::start()
 {
-//    process->start("ping localhost");
+
     process->start("python", pythonCommandArguments);
 }
 
@@ -35,27 +36,35 @@ void ScriptRunner::stop()
 
 void ScriptRunner::setFile(const QString &filePath)
 {
-    scriptFile = QCoreApplication::applicationDirPath() + filePath;
-    pythonCommandArguments << filePath;
-    qDebug() << filePath;
+    pythonCommandArguments.replace(0, filePath);
+    qDebug() << pythonCommandArguments;
 }
 
-void ScriptRunner::setArguments(const QStringList& args)
+void ScriptRunner::setArgument(int num, const QString &text)
 {
-    pythonCommandArguments << args;
+    pythonCommandArguments.replace(num, text);
 }
 
+void ScriptRunner::addArgument()
+{
+    pythonCommandArguments.append("");
+}
+
+void ScriptRunner::delArgument()
+{
+    pythonCommandArguments.removeLast();
+}
 
 void ScriptRunner::readStdOut()
 {
     QByteArray sout;
     sout = process->readAllStandardOutput();
-    emit readyReadStdout(QString(sout));
+    emit readyReadStdout(tr(sout));
 }
 
 void ScriptRunner::readStdErr()
 {
     QByteArray serr;
     serr = process->readAllStandardError();
-    emit readyReadStderr(QString(serr));
+    emit readyReadStderr(tr(serr));
 }
